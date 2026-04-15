@@ -1,0 +1,185 @@
+/* ─────────────────────────────────────────────
+   GLOBAL STYLES - BLINDED MUSLIM
+───────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --charcoal:    #141210;
+  --charcoal-2:  #1C1916;
+  --charcoal-3:  #232019;
+  --parchment:   #F7F2E8;
+  --parchment-2: #EDE7D4;
+  --parchment-3: #E3DAC4;
+  --gold:        #B8883C;
+  --gold-light:  #D4A85A;
+  --gold-pale:   #E8CFA0;
+  --text-main:   #1C1916;
+  --text-muted:  #7A6F5E;
+  --text-faint:  #A89880;
+  --border:      rgba(184,136,60,0.20);
+  --border-dark: rgba(184,136,60,0.12);
+  --accent-red:  #8B2E2E;
+  --accent-teal: #1F5C52;
+  --accent-blue: #1E3D6B;
+  --white:       #FFFFFF;
+}
+
+body {
+  background: var(--parchment);
+  color: var(--text-main);
+  font-weight: 300;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* Typography helpers - specific font families will be set via Next.js fonts */
+.f-display { 
+  font-family: var(--font-cormorant), serif; 
+  font-variant-numeric: lining-nums;
+}
+.f-arabic  { font-family: var(--font-noto-arabic), serif; }
+.f-sans    { font-family: var(--font-outfit), sans-serif; }
+.f-num     { font-family: var(--font-outfit), sans-serif; font-variant-numeric: lining-nums; }
+
+/* Global Font defaults set in layout.js */
+
+/* Fade animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.75s cubic-bezier(.22,1,.36,1),
+              transform 0.75s cubic-bezier(.22,1,.36,1);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.08s; }
+.d2 { transition-delay: 0.16s; }
+.d3 { transition-delay: 0.24s; }
+.d4 { transition-delay: 0.32s; }
+.d5 { transition-delay: 0.40s; }
+.d6 { transition-delay: 0.50s; }
+
+/* Section rhythm */
+section { position: relative; }
+
+/* Thin horizontal rule */
+.hr { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* Serif drop cap size */
+.drop-cap::first-letter {
+  font-family: var(--font-cormorant), serif;
+  font-size: 4em;
+  float: left;
+  line-height: 0.75;
+  margin: 0.05em 0.08em 0 0;
+  color: var(--gold);
+}
+
+/* Primary button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 40px;
+  background: var(--charcoal);
+  color: var(--parchment);
+  font-weight: 500;
+  font-size: 0.88rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--charcoal);
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.btn-primary:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--charcoal);
+}
+
+/* Ghost button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 36px;
+  background: transparent;
+  color: var(--charcoal);
+  font-weight: 500;
+  font-size: 0.88rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--charcoal);
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+.btn-ghost:hover { background: var(--charcoal); color: var(--parchment); }
+
+/* Gold tag */
+.label-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  font-size: 0.70rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+}
+
+/* Decorative ornament line */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+.ornament-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+}
+.ornament-diamond {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+/* Card base */
+.card-base {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 2rem 2rem;
+}
+
+/* Subtle noise bg for hero */
+.texture-bg {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Poster frame glow on hover */
+.poster-frame {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--charcoal-3);
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s;
+}
+.poster-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(184,136,60,0.15);
+}
+
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr !important; }
+  .three-col { grid-template-columns: 1fr !important; }
+  .module-grid { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 480px) {
+  .btn-primary, .btn-ghost { padding: 13px 24px; font-size: 0.80rem; }
+}

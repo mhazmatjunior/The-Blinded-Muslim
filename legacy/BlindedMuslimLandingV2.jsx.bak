@@ -1,0 +1,1169 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+
+/* ─────────────────────────────────────────────
+   GLOBAL STYLES
+───────────────────────────────────────────── */
+const GlobalStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --charcoal:    #141210;
+      --charcoal-2:  #1C1916;
+      --charcoal-3:  #232019;
+      --parchment:   #F7F2E8;
+      --parchment-2: #EDE7D4;
+      --parchment-3: #E3DAC4;
+      --gold:        #B8883C;
+      --gold-light:  #D4A85A;
+      --gold-pale:   #E8CFA0;
+      --text-main:   #1C1916;
+      --text-muted:  #7A6F5E;
+      --text-faint:  #A89880;
+      --border:      rgba(184,136,60,0.20);
+      --border-dark: rgba(184,136,60,0.12);
+      --accent-red:  #8B2E2E;
+      --accent-teal: #1F5C52;
+      --accent-blue: #1E3D6B;
+      --white:       #FFFFFF;
+    }
+
+    body {
+      background: var(--parchment);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Typography helpers */
+    .f-display   { font-family: 'Cormorant Garamond', serif; }
+    .f-arabic    { font-family: 'Noto Naskh Arabic', serif; }
+    .f-sans      { font-family: 'Outfit', sans-serif; }
+
+    /* Fade animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.75s cubic-bezier(.22,1,.36,1),
+                  transform 0.75s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.40s; }
+    .d6 { transition-delay: 0.50s; }
+
+    /* Section rhythm */
+    section { position: relative; }
+
+    /* Thin horizontal rule */
+    .hr { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* Serif drop cap size */
+    .drop-cap::first-letter {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4em;
+      float: left;
+      line-height: 0.75;
+      margin: 0.05em 0.08em 0 0;
+      color: var(--gold);
+    }
+
+    /* Primary button */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 40px;
+      background: var(--charcoal);
+      color: var(--parchment);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1.5px solid var(--charcoal);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+    .btn-primary:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--charcoal);
+    }
+
+    /* Ghost button */
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--charcoal);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1.5px solid var(--charcoal);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .btn-ghost:hover { background: var(--charcoal); color: var(--parchment); }
+
+    /* Gold tag */
+    .label-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.70rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+
+    /* Decorative ornament line */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .ornament-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .ornament-diamond {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* Card base */
+    .card-base {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 2rem 2rem;
+    }
+
+    /* Subtle noise bg for hero */
+    .texture-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+
+    /* Poster frame glow on hover */
+    .poster-frame {
+      position: relative;
+      border: 1px solid var(--border);
+      background: var(--charcoal-3);
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(.22,1,.36,1), box-shadow 0.4s;
+    }
+    .poster-frame:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(184,136,60,0.15);
+    }
+
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr !important; }
+      .three-col { grid-template-columns: 1fr !important; }
+      .module-grid { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 480px) {
+      .btn-primary, .btn-ghost { padding: 13px 24px; font-size: 0.80rem; }
+    }
+  `}</style>
+);
+
+/* ─────────────────────────────────────────────
+   REVEAL HOOK
+───────────────────────────────────────────── */
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+/* ─────────────────────────────────────────────
+   ORNAMENT
+───────────────────────────────────────────── */
+const Ornament = () => (
+  <div className="ornament">
+    <div className="ornament-line" />
+    <div className="ornament-diamond" />
+    <div className="ornament-line" />
+  </div>
+);
+
+/* ─────────────────────────────────────────────
+   SECTION HEADER
+───────────────────────────────────────────── */
+const SectionHeader = ({ label, heading, sub, light = false }) => (
+  <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+    <div className="reveal" style={{ marginBottom: "1rem" }}>
+      <Ornament />
+      <span className="label-tag" style={light ? { color: "var(--gold-pale)", borderColor: "var(--gold-pale)" } : {}}>
+        {label}
+      </span>
+    </div>
+    <h2
+      className="f-display reveal d1"
+      style={{
+        fontSize: "clamp(2rem, 4.5vw, 3.4rem)",
+        fontWeight: 600,
+        lineHeight: 1.15,
+        color: light ? "var(--parchment)" : "var(--charcoal)",
+        maxWidth: 680,
+        margin: "0.75rem auto 0",
+      }}
+    >
+      {heading}
+    </h2>
+    {sub && (
+      <p
+        className="reveal d2"
+        style={{
+          marginTop: "1rem",
+          color: light ? "var(--gold-pale)" : "var(--text-muted)",
+          maxWidth: 520,
+          margin: "1rem auto 0",
+          fontSize: "1rem",
+          fontWeight: 300,
+        }}
+      >
+        {sub}
+      </p>
+    )}
+  </div>
+);
+
+/* ─────────────────────────────────────────────
+   NAVBAR
+───────────────────────────────────────────── */
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", h);
+    return () => window.removeEventListener("scroll", h);
+  }, []);
+
+  return (
+    <nav
+      style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+        padding: "0 48px",
+        height: 68,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        background: scrolled ? "rgba(247,242,232,0.97)" : "transparent",
+        borderBottom: scrolled ? "1px solid var(--border)" : "none",
+        backdropFilter: scrolled ? "blur(16px)" : "none",
+        transition: "all 0.35s",
+      }}
+    >
+      {/* Logo */}
+      <div className="f-display" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect x="8.5" y="0.707" width="11.5" height="11.5" transform="rotate(45 8.5 0.707)" fill="none" stroke="var(--gold)" strokeWidth="1"/>
+          <rect x="8.5" y="3.536" width="7" height="7" transform="rotate(45 8.5 3.536)" fill="var(--gold)" opacity="0.35"/>
+        </svg>
+        <span style={{ fontSize: "1.05rem", fontWeight: 600, letterSpacing: "0.03em", color: "var(--charcoal)" }}>
+          Blinded Muslim
+        </span>
+      </div>
+
+      {/* Nav links */}
+      <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+        {[["#course", "Course"], ["#poster", "Batch 3"], ["#enroll", "Enroll"]].map(([href, label]) => (
+          <a
+            key={label}
+            href={href}
+            style={{
+              color: "var(--text-muted)",
+              textDecoration: "none",
+              fontSize: "0.82rem",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.target.style.color = "var(--gold)")}
+            onMouseLeave={(e) => (e.target.style.color = "var(--text-muted)")}
+          >
+            {label}
+          </a>
+        ))}
+        <a href="#enroll" className="btn-primary" style={{ padding: "10px 28px", fontSize: "0.78rem" }}>
+          Join Now
+        </a>
+      </div>
+    </nav>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+function Hero() {
+  return (
+    <section
+      className="texture-bg"
+      style={{
+        minHeight: "100vh",
+        background: `
+          radial-gradient(ellipse 90% 70% at 60% 40%, rgba(184,136,60,0.06) 0%, transparent 65%),
+          var(--parchment)
+        `,
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        alignItems: "center",
+        gap: "4rem",
+        padding: "120px 80px 80px",
+        maxWidth: 1280,
+        margin: "0 auto",
+      }}
+    >
+      {/* Left — text */}
+      <div>
+        <div className="reveal" style={{ marginBottom: "1.5rem" }}>
+          <Ornament />
+          <span className="label-tag">Batch 3 · Now Open</span>
+        </div>
+
+        {/* Arabic */}
+        <p
+          className="f-arabic reveal d1"
+          style={{
+            fontSize: "1.8rem",
+            color: "var(--gold)",
+            letterSpacing: "0.04em",
+            marginBottom: "1.25rem",
+            lineHeight: 1.6,
+          }}
+        >
+          اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ
+        </p>
+
+        <h1
+          className="f-display reveal d2"
+          style={{
+            fontSize: "clamp(2.8rem, 5vw, 4.2rem)",
+            fontWeight: 700,
+            lineHeight: 1.1,
+            color: "var(--charcoal)",
+            marginBottom: "1.5rem",
+          }}
+        >
+          Reconnecting
+          <br />
+          <em style={{ color: "var(--gold)", fontStyle: "italic" }}>Students</em> with Islam
+          <br />
+          in a World of Confusion
+        </h1>
+
+        <p
+          className="reveal d3"
+          style={{
+            color: "var(--text-muted)",
+            fontSize: "1.02rem",
+            maxWidth: 460,
+            marginBottom: "2.5rem",
+            fontWeight: 300,
+          }}
+        >
+          A structured 3-month journey designed to help university students rediscover
+          clarity, purpose, and the true understanding of Islam in today's intellectual
+          and ideological chaos.
+        </p>
+
+        {/* Trust signals */}
+        <div className="reveal d4" style={{ display: "flex", gap: "2rem", marginBottom: "2.5rem", flexWrap: "wrap" }}>
+          {[
+            { num: "300+", label: "Students Enrolled" },
+            { num: "3rd", label: "Batch Running" },
+            { num: "3", label: "Universities" },
+          ].map((s) => (
+            <div key={s.label}>
+              <p className="f-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--charcoal)", lineHeight: 1 }}>{s.num}</p>
+              <p style={{ fontSize: "0.75rem", color: "var(--text-faint)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 4 }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="reveal d5" style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <a href="#enroll" className="btn-primary">Join Batch 3 Now →</a>
+          <a href="#course" className="btn-ghost">View Course</a>
+        </div>
+      </div>
+
+      {/* Right — decorative framed visual */}
+      <div className="reveal d3" style={{ position: "relative" }}>
+        {/* Offset frame */}
+        <div style={{
+          position: "absolute",
+          inset: -12,
+          border: "1px solid var(--border)",
+          zIndex: 0,
+        }} />
+        <div style={{
+          position: "relative",
+          zIndex: 1,
+          background: "var(--charcoal)",
+          aspectRatio: "3/4",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "3rem",
+          overflow: "hidden",
+        }}>
+          {/* Corner ornaments */}
+          {[
+            { top: 20, left: 20 },
+            { top: 20, right: 20 },
+            { bottom: 20, left: 20 },
+            { bottom: 20, right: 20 },
+          ].map((pos, i) => (
+            <svg key={i} width="20" height="20" style={{ position: "absolute", ...pos }}>
+              <path d={i < 2 ? "M0,20 L0,0 L20,0" : "M0,0 L0,20 L20,20"} fill="none" stroke="var(--gold)" strokeWidth="1" />
+            </svg>
+          ))}
+
+          {/* Decorative pattern */}
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: `
+              radial-gradient(circle at 50% 50%, rgba(184,136,60,0.12) 0%, transparent 60%),
+              repeating-linear-gradient(45deg, rgba(184,136,60,0.03) 0px, rgba(184,136,60,0.03) 1px, transparent 1px, transparent 40px),
+              repeating-linear-gradient(-45deg, rgba(184,136,60,0.03) 0px, rgba(184,136,60,0.03) 1px, transparent 1px, transparent 40px)
+            `,
+          }} />
+
+          {/* Star of Islamic geometry */}
+          <svg width="120" height="120" viewBox="0 0 120 120" style={{ marginBottom: "1.5rem", opacity: 0.6 }}>
+            <polygon points="60,5 73,40 110,40 80,62 92,97 60,76 28,97 40,62 10,40 47,40" fill="none" stroke="var(--gold)" strokeWidth="1"/>
+            <polygon points="60,20 70,48 100,48 76,65 85,93 60,76 35,93 44,65 20,48 50,48" fill="none" stroke="var(--gold)" strokeWidth="0.5" opacity="0.5"/>
+            <circle cx="60" cy="60" r="8" fill="none" stroke="var(--gold)" strokeWidth="1"/>
+          </svg>
+
+          <p className="f-arabic" style={{ color: "var(--gold)", fontSize: "1.4rem", marginBottom: "1rem", textAlign: "center" }}>الْبَصِيرَة</p>
+          <p className="f-display" style={{ color: "var(--parchment-2)", fontSize: "1.1rem", fontStyle: "italic", textAlign: "center", lineHeight: 1.5 }}>
+            "Clarity begins<br />where confusion ends"
+          </p>
+
+          <div style={{ width: 40, height: 1, background: "var(--gold)", margin: "1.5rem auto" }} />
+
+          <p style={{ color: "var(--text-faint)", fontSize: "0.75rem", letterSpacing: "0.14em", textTransform: "uppercase", textAlign: "center" }}>
+            Batch 3 · University Students
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   PROBLEM SECTION
+───────────────────────────────────────────── */
+function ProblemSection() {
+  const problems = [
+    { icon: "◈", text: "Confusion between modern ideologies and Islamic teachings" },
+    { icon: "◈", text: "Constant internal conflict about belief and identity" },
+    { icon: "◈", text: "Exposure to narratives that distort Islamic understanding" },
+    { icon: "◈", text: "Lack of clarity about purpose and direction" },
+    { icon: "◈", text: "Feeling 'educated' but not truly grounded" },
+  ];
+  return (
+    <section style={{ background: "var(--charcoal)", padding: "100px 80px" }}>
+      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+        <SectionHeader
+          label="The Problem"
+          heading="Why So Many Educated Students Still Feel Lost"
+          light
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }} className="two-col">
+          {/* Left — statement */}
+          <div className="reveal" style={{ borderLeft: "2px solid var(--gold)", paddingLeft: "2rem" }}>
+            <p className="f-display" style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)", color: "var(--parchment)", lineHeight: 1.4, fontStyle: "italic", marginBottom: "1.5rem" }}>
+              You study. You achieve grades. You build skills.
+            </p>
+            <p className="f-display" style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)", color: "var(--gold-light)", lineHeight: 1.4, fontStyle: "italic" }}>
+              But somewhere inside, something still feels missing.
+            </p>
+
+            <div style={{ marginTop: "2.5rem", padding: "1.5rem", background: "rgba(184,136,60,0.07)", border: "1px solid rgba(184,136,60,0.15)" }}>
+              <p style={{ color: "var(--gold-pale)", fontSize: "0.9rem", lineHeight: 1.8 }}>
+                The real issue is not ignorance.<br />
+                <strong style={{ color: "var(--parchment)", fontWeight: 500 }}>
+                  It is misunderstanding — shaped by environment, narratives, and incomplete knowledge.
+                </strong>
+              </p>
+            </div>
+          </div>
+
+          {/* Right — problem list */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "rgba(184,136,60,0.12)" }}>
+            {problems.map((p, i) => (
+              <div
+                key={i}
+                className={`reveal d${i + 1}`}
+                style={{
+                  background: "var(--charcoal-2)",
+                  padding: "1.2rem 1.5rem",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "1rem",
+                }}
+              >
+                <span style={{ color: "var(--gold)", marginTop: 3, flexShrink: 0, fontSize: "0.8rem" }}>◆</span>
+                <span style={{ color: "var(--parchment-2)", fontSize: "0.92rem", fontWeight: 300 }}>{p.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   CREDIBILITY
+───────────────────────────────────────────── */
+function CredibilitySection() {
+  const unis = [
+    { name: "UET Taxila", sub: "Leading Engineering University" },
+    { name: "HITEC University", sub: "Taxila, Punjab" },
+    { name: "University of Chenab", sub: "Expanding Reach" },
+  ];
+  return (
+    <section style={{ background: "var(--parchment-2)", padding: "100px 80px" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+        <SectionHeader
+          label="Credibility"
+          heading="Built Inside Universities, For University Minds"
+          sub="This is not a distant lecture series. It is a response to real intellectual and spiritual struggles faced by students today."
+        />
+
+        {/* University cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", marginBottom: "4rem" }} className="three-col">
+          {unis.map((u, i) => (
+            <div
+              key={u.name}
+              className={`reveal d${i + 1}`}
+              style={{
+                background: "var(--white)",
+                border: "1px solid var(--border)",
+                padding: "2rem",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "var(--gold)" }} />
+              <svg width="32" height="32" viewBox="0 0 32 32" style={{ marginBottom: "1rem", opacity: 0.4 }}>
+                <rect x="13" y="0.707" width="18.5" height="18.5" transform="rotate(45 13 0.707)" fill="none" stroke="var(--gold)" strokeWidth="1"/>
+              </svg>
+              <p className="f-display" style={{ fontSize: "1.2rem", fontWeight: 600, color: "var(--charcoal)", marginBottom: "0.3rem" }}>{u.name}</p>
+              <p style={{ color: "var(--text-faint)", fontSize: "0.78rem", letterSpacing: "0.06em" }}>{u.sub}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Quote from CBS President */}
+        <div className="reveal" style={{
+          padding: "2.5rem 3rem",
+          background: "var(--charcoal)",
+          border: "1px solid var(--border)",
+          position: "relative",
+          maxWidth: 720,
+          margin: "0 auto",
+        }}>
+          <span className="f-display" style={{ position: "absolute", top: -20, left: 32, fontSize: "5rem", color: "var(--gold)", lineHeight: 1, opacity: 0.4 }}>"</span>
+          <p className="f-display" style={{ color: "var(--parchment)", fontSize: "1.2rem", fontStyle: "italic", lineHeight: 1.65, position: "relative", zIndex: 1 }}>
+            The President of CBS personally participated in Batch 02 and strongly advocated bringing this course to the University of Chenab, considering it essential for university students.
+          </p>
+          <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ width: 32, height: 1, background: "var(--gold)" }} />
+            <p style={{ color: "var(--text-faint)", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>President, CBS</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   POSTER SECTION
+───────────────────────────────────────────── */
+function PosterSection() {
+  return (
+    <section id="poster" style={{ background: "var(--charcoal-2)", padding: "100px 80px" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+        <SectionHeader
+          label="Batch 3"
+          heading="Official Poster"
+          sub="The journey begins here — share it, display it, carry the message forward."
+          light
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "4rem", alignItems: "center" }} className="two-col">
+          {/* Poster frame */}
+          <div className="poster-frame reveal" style={{ aspectRatio: "3/4" }}>
+            {/* Inner decorative border */}
+            <div style={{ position: "absolute", inset: 16, border: "1px solid rgba(184,136,60,0.25)", zIndex: 1, pointerEvents: "none" }} />
+
+            {/* Background pattern */}
+            <div style={{
+              position: "absolute", inset: 0,
+              backgroundImage: `
+                radial-gradient(ellipse 70% 50% at 50% 30%, rgba(184,136,60,0.10) 0%, transparent 60%),
+                repeating-linear-gradient(45deg, rgba(184,136,60,0.03) 0, rgba(184,136,60,0.03) 1px, transparent 1px, transparent 50px),
+                repeating-linear-gradient(-45deg, rgba(184,136,60,0.03) 0, rgba(184,136,60,0.03) 1px, transparent 1px, transparent 50px)
+              `,
+            }} />
+
+            {/* ── YOUR POSTER IMAGE GOES HERE ── */}
+            {/* Replace the placeholder below with: */}
+            {/* <img src="/images/batch3-poster.jpg" alt="Blinded Muslim Batch 3 Poster"
+                    style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }} /> */}
+
+            {/* Placeholder content */}
+            <div style={{
+              position: "absolute", inset: 0,
+              display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center",
+              padding: "3rem",
+              zIndex: 2,
+            }}>
+              {/* Geometric star */}
+              <svg width="80" height="80" viewBox="0 0 80 80" style={{ marginBottom: "1.5rem" }}>
+                <polygon points="40,4 49,28 75,28 54,44 62,68 40,52 18,68 26,44 5,28 31,28" fill="none" stroke="var(--gold)" strokeWidth="1" opacity="0.7"/>
+                <polygon points="40,14 47,33 67,33 51,44 58,63 40,51 22,63 29,44 13,33 33,33" fill="none" stroke="var(--gold)" strokeWidth="0.5" opacity="0.4"/>
+                <circle cx="40" cy="40" r="5" fill="var(--gold)" opacity="0.6"/>
+              </svg>
+
+              <p className="f-arabic" style={{ color: "var(--gold)", fontSize: "1.6rem", marginBottom: "0.5rem" }}>دورة المسلم الأعمى</p>
+
+              <div style={{ width: 40, height: 1, background: "var(--gold)", margin: "1rem 0", opacity: 0.5 }} />
+
+              <p className="f-display" style={{ color: "var(--parchment)", fontSize: "1.8rem", fontWeight: 700, textAlign: "center", lineHeight: 1.2, marginBottom: "0.5rem" }}>
+                BLINDED<br />MUSLIM
+              </p>
+
+              <p style={{ color: "var(--gold-pale)", fontSize: "0.75rem", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "2rem" }}>
+                Course · Batch 3
+              </p>
+
+              {/* Placeholder notice */}
+              <div style={{
+                position: "absolute",
+                bottom: 24, left: 24, right: 24,
+                background: "rgba(184,136,60,0.10)",
+                border: "1px dashed rgba(184,136,60,0.30)",
+                padding: "12px",
+                textAlign: "center",
+              }}>
+                <p style={{ color: "var(--gold-pale)", fontSize: "0.72rem", letterSpacing: "0.08em" }}>
+                  ↑ Replace with your Batch 3 poster image
+                </p>
+                <p style={{ color: "var(--text-faint)", fontSize: "0.68rem", marginTop: 4 }}>
+                  Recommended: 600×800px · PNG or JPG
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — poster details */}
+          <div>
+            <div className="reveal" style={{ marginBottom: "2.5rem" }}>
+              <p className="f-display" style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: "var(--parchment)", lineHeight: 1.3, marginBottom: "1rem", fontStyle: "italic" }}>
+                "Batch 3 marks a new chapter in structured Islamic clarity for university students."
+              </p>
+              <p style={{ color: "var(--text-faint)", fontSize: "0.9rem", lineHeight: 1.8 }}>
+                After two successful batches across UET Taxila, HITEC University, and the University of Chenab — Batch 3 opens with expanded reach, deeper content, and a refined approach.
+              </p>
+            </div>
+
+            {[
+              { label: "Format", value: "4 sessions per month · 3 months" },
+              { label: "Mode", value: "Structured discussion-based learning" },
+              { label: "Audience", value: "University students only" },
+              { label: "Language", value: "Urdu / English" },
+              { label: "Batch Size", value: "Limited spots available" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="reveal"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "130px 1fr",
+                  gap: "1rem",
+                  padding: "1rem 0",
+                  borderBottom: "1px solid rgba(184,136,60,0.12)",
+                  alignItems: "baseline",
+                }}
+              >
+                <span style={{ color: "var(--gold)", fontSize: "0.75rem", letterSpacing: "0.10em", textTransform: "uppercase", fontWeight: 500 }}>{item.label}</span>
+                <span style={{ color: "var(--parchment-2)", fontSize: "0.92rem", fontWeight: 300 }}>{item.value}</span>
+              </div>
+            ))}
+
+            <div className="reveal" style={{ marginTop: "2.5rem" }}>
+              <a href="#enroll" className="btn-primary">
+                Reserve Your Spot →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   MODULES
+───────────────────────────────────────────── */
+function ModulesSection() {
+  const modules = [
+    {
+      n: "I",
+      color: "var(--accent-red)",
+      colorBg: "rgba(139,46,46,0.07)",
+      label: "Module One · The Problem",
+      title: "Understanding Why Confusion Exists",
+      points: [
+        "Meaning and importance of true knowledge",
+        "Difference between information and understanding",
+        "Psychological and intellectual distortion in modern life",
+        "Misalignment in core beliefs — Tauheed, fear, fascination",
+        "Influence of environment on thinking patterns",
+        "Introduction to the true concept of Ibadah",
+      ],
+      close: "You don't just learn the problem — you learn how it formed.",
+    },
+    {
+      n: "II",
+      color: "var(--accent-teal)",
+      colorBg: "rgba(31,92,82,0.07)",
+      label: "Module Two · The Solution",
+      title: "Rebuilding Clarity From the Foundation",
+      points: [
+        "Deep understanding of Iman and its components",
+        "Clearing misconceptions about core beliefs",
+        "Detailed discussion on Akhirah and Al-Qadr",
+        "Answering doubts commonly faced by students",
+        "Establishing Islam as a complete and authoritative system of life",
+      ],
+      close: "This module reconstructs clarity from the ground up.",
+    },
+    {
+      n: "III",
+      color: "var(--accent-blue)",
+      colorBg: "rgba(30,61,107,0.07)",
+      label: "Module Three · The Way Forward",
+      title: "Living With Awareness and Direction",
+      points: [
+        "Understanding ideological and cultural influences",
+        "How narratives are shaped in modern society",
+        "Intellectual and spiritual awareness in daily life",
+        "Practical roadmap after gaining clarity",
+        "Implementation of understanding into real-world behavior",
+      ],
+      close: "This is where clarity turns into action.",
+    },
+  ];
+
+  return (
+    <section id="course" style={{ background: "var(--parchment)", padding: "100px 80px" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+        <SectionHeader
+          label="Course Structure"
+          heading="A Complete 3-Month Intellectual & Spiritual Framework"
+          sub="Three structured modules · One month each · Four guided sessions per module"
+        />
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px", background: "var(--border)" }}>
+          {modules.map((mod, i) => (
+            <div
+              key={mod.n}
+              className={`reveal d${i + 1}`}
+              style={{
+                background: "var(--white)",
+                display: "grid",
+                gridTemplateColumns: "80px 1fr",
+                overflow: "hidden",
+              }}
+            >
+              {/* Number column */}
+              <div style={{
+                background: mod.colorBg,
+                borderRight: `2px solid ${mod.color}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "2.5rem 1rem",
+              }}>
+                <span className="f-display" style={{ fontSize: "2.2rem", fontWeight: 700, color: mod.color, lineHeight: 1 }}>{mod.n}</span>
+              </div>
+
+              {/* Content column */}
+              <div style={{ padding: "2.5rem 3rem" }}>
+                <p style={{ color: mod.color, fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600, marginBottom: "0.4rem" }}>{mod.label}</p>
+                <h3 className="f-display" style={{ fontSize: "1.6rem", fontWeight: 600, color: "var(--charcoal)", marginBottom: "1.5rem" }}>{mod.title}</h3>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }} className="two-col">
+                  {mod.points.map((pt) => (
+                    <div key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                      <span style={{ color: mod.color, fontSize: "0.55rem", flexShrink: 0, marginTop: 7 }}>◆</span>
+                      <span style={{ color: "var(--text-muted)", fontSize: "0.88rem", lineHeight: 1.6 }}>{pt}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="f-display" style={{ color: "var(--gold)", fontStyle: "italic", fontSize: "1rem", borderTop: "1px solid var(--border)", paddingTop: "1.2rem" }}>
+                  → {mod.close}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   TRANSFORMATION
+───────────────────────────────────────────── */
+function TransformationSection() {
+  const shifts = [
+    ["Confusion", "Clarity"],
+    ["Doubt", "Understanding"],
+    ["Passive Belief", "Conscious Conviction"],
+    ["External Influence", "Internal Grounding"],
+    ["Searching", "Purpose-Driven Living"],
+  ];
+  return (
+    <section style={{ background: "var(--charcoal)", padding: "100px 80px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <SectionHeader
+          label="Transformation"
+          heading="Who You Become After This Course"
+          sub="By the end of this journey, you are not the same person."
+          light
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "0", alignItems: "stretch" }}>
+          {/* From column */}
+          <div>
+            <p style={{ color: "var(--text-faint)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", textAlign: "center", padding: "0 0 1rem", borderBottom: "1px solid rgba(184,136,60,0.15)" }}>Before</p>
+            {shifts.map(([from]) => (
+              <div key={from} style={{ padding: "1.25rem 2rem 1.25rem 0", borderBottom: "1px solid rgba(184,136,60,0.08)", textAlign: "right" }}>
+                <span style={{ color: "var(--text-faint)", fontSize: "0.97rem", textDecoration: "line-through" }}>{from}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Arrow column */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ height: "3rem" }} />
+            {shifts.map((_, i) => (
+              <div key={i} style={{ height: "3.5rem", display: "flex", alignItems: "center" }}>
+                <span style={{ color: "var(--gold)", fontSize: "1.1rem", padding: "0 1.5rem" }}>→</span>
+              </div>
+            ))}
+          </div>
+
+          {/* To column */}
+          <div>
+            <p style={{ color: "var(--text-faint)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", textAlign: "center", padding: "0 0 1rem", borderBottom: "1px solid rgba(184,136,60,0.15)" }}>After</p>
+            {shifts.map(([_, to]) => (
+              <div key={to} style={{ padding: "1.25rem 0 1.25rem 2rem", borderBottom: "1px solid rgba(184,136,60,0.08)" }}>
+                <span style={{ color: "var(--parchment)", fontSize: "0.97rem", fontWeight: 500 }}>{to}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="f-display reveal" style={{ textAlign: "center", color: "var(--gold-light)", fontStyle: "italic", fontSize: "1.1rem", marginTop: "3rem" }}>
+          This is not just learning — it is realignment of thought, belief, and direction.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   WHY DIFFERENT
+───────────────────────────────────────────── */
+function WhyDifferentSection() {
+  return (
+    <section style={{ background: "var(--parchment-2)", padding: "100px 80px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <SectionHeader
+          label="Distinction"
+          heading="What This Course Actually Is"
+        />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1px 1fr", gap: "3rem" }} className="two-col">
+          {/* NOT */}
+          <div className="reveal">
+            <p style={{ fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--accent-red)", fontWeight: 600, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ display: "inline-block", width: 20, height: 1, background: "var(--accent-red)" }} />
+              This is Not
+            </p>
+            {[
+              "A motivational talk series",
+              "A surface-level Islamic introduction",
+              "A sectarian or biased narrative",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: "12px", marginBottom: "1.2rem", alignItems: "flex-start" }}>
+                <span style={{ color: "var(--accent-red)", flexShrink: 0, fontSize: "0.75rem", marginTop: 4 }}>✕</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.93rem" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div style={{ background: "var(--border)", width: 1 }} className="reveal" />
+
+          {/* IS */}
+          <div className="reveal d2">
+            <p style={{ fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--accent-teal)", fontWeight: 600, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ display: "inline-block", width: 20, height: 1, background: "var(--accent-teal)" }} />
+              This Is
+            </p>
+            {[
+              "Structured intellectual clarity",
+              "Deep Islamic understanding",
+              "Contextual explanation for modern student life",
+              "A system to rebuild thinking, not just memorize information",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: "12px", marginBottom: "1.2rem", alignItems: "flex-start" }}>
+                <span style={{ color: "var(--gold)", flexShrink: 0, fontSize: "0.75rem", marginTop: 4 }}>◆</span>
+                <span style={{ color: "var(--charcoal)", fontSize: "0.93rem", fontWeight: 400 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   WHO FOR
+───────────────────────────────────────────── */
+function WhoSection() {
+  return (
+    <section style={{ background: "var(--parchment)", padding: "80px 80px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <SectionHeader label="Eligibility" heading="Is This Course For You?" />
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }} className="two-col">
+          <div className="card-base reveal" style={{ borderTop: "2px solid var(--gold)" }}>
+            <p className="f-display" style={{ color: "var(--gold)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "1.25rem" }}>For You If…</p>
+            {[
+              "You are a university student facing ideological confusion",
+              "You feel disconnected between modern life and faith",
+              "You want structured understanding, not scattered information",
+              "You want clarity, not just inspiration",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: "12px", marginBottom: "1rem", alignItems: "flex-start" }}>
+                <span style={{ color: "var(--gold)", fontSize: "0.75rem", flexShrink: 0, marginTop: 4 }}>◆</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="card-base reveal d2" style={{ borderTop: "2px solid var(--parchment-3)" }}>
+            <p className="f-display" style={{ color: "var(--text-faint)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "1.25rem" }}>Not For You If…</p>
+            {[
+              "You are looking for quick motivational content",
+              "You are not willing to think deeply",
+              "You are uninterested in intellectual reflection",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: "12px", marginBottom: "1rem", alignItems: "flex-start" }}>
+                <span style={{ color: "var(--text-faint)", fontSize: "0.75rem", flexShrink: 0, marginTop: 4 }}>◇</span>
+                <span style={{ color: "var(--text-faint)", fontSize: "0.9rem" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   ENROLL CTA
+───────────────────────────────────────────── */
+function EnrollSection() {
+  return (
+    <section id="enroll" style={{
+      background: "var(--charcoal)",
+      padding: "120px 80px",
+      textAlign: "center",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Background radial */}
+      <div style={{
+        position: "absolute", inset: 0,
+        backgroundImage: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(184,136,60,0.10) 0%, transparent 65%)",
+        pointerEvents: "none",
+      }} />
+
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 640, margin: "0 auto" }}>
+        <Ornament />
+        <span className="label-tag reveal" style={{ color: "var(--gold-pale)", borderColor: "var(--gold-pale)" }}>
+          Enrollment Open
+        </span>
+
+        <h2
+          className="f-display reveal d1"
+          style={{
+            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+            fontWeight: 700,
+            color: "var(--parchment)",
+            lineHeight: 1.1,
+            margin: "1rem 0",
+          }}
+        >
+          Batch 3 Is
+          <br />
+          <em style={{ color: "var(--gold)" }}>Now Open</em>
+        </h2>
+
+        <p className="reveal d2" style={{ color: "var(--text-faint)", fontSize: "0.95rem", marginBottom: "0.5rem" }}>
+          Spots are limited due to structured mentorship and discussion-based learning format.
+        </p>
+        <p className="reveal d3" style={{ color: "var(--parchment-2)", fontSize: "0.95rem", marginBottom: "3rem", fontWeight: 400 }}>
+          Enrollment is currently active for university students.
+        </p>
+
+        <div className="reveal d4" style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+          <a href="#" className="btn-primary" style={{ background: "var(--gold)", borderColor: "var(--gold)", color: "var(--charcoal)", padding: "18px 52px", fontSize: "0.92rem" }}>
+            Join Blinded Muslim Course →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   FINAL MESSAGE
+───────────────────────────────────────────── */
+function FinalMessage() {
+  return (
+    <section style={{ background: "var(--parchment)", padding: "100px 80px", textAlign: "center" }}>
+      <div style={{ maxWidth: 600, margin: "0 auto" }}>
+        <svg width="1" height="60" style={{ display: "block", margin: "0 auto 2.5rem" }}>
+          <line x1="0" y1="0" x2="0" y2="60" stroke="var(--gold)" strokeWidth="1" />
+        </svg>
+
+        <p
+          className="f-display reveal"
+          style={{
+            fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
+            color: "var(--charcoal)",
+            lineHeight: 1.65,
+            fontStyle: "italic",
+            fontWeight: 400,
+          }}
+        >
+          "If you are at a stage where knowledge feels scattered, beliefs feel challenged,
+          and clarity feels distant — this course is designed to help you rebuild your
+          understanding step by step."
+        </p>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem", justifyContent: "center", margin: "2rem 0" }}>
+          <div style={{ width: 32, height: 1, background: "var(--gold)" }} />
+          <span style={{ color: "var(--gold)", fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase" }}>Not through assumptions. Through structured clarity.</span>
+          <div style={{ width: 32, height: 1, background: "var(--gold)" }} />
+        </div>
+
+        <svg width="1" height="60" style={{ display: "block", margin: "0 auto" }}>
+          <line x1="0" y1="0" x2="0" y2="60" stroke="var(--gold)" strokeWidth="1" />
+        </svg>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────── */
+function Footer() {
+  return (
+    <footer style={{
+      background: "var(--charcoal-3)",
+      padding: "2.5rem 80px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      flexWrap: "wrap",
+      gap: "1rem",
+      borderTop: "1px solid rgba(184,136,60,0.12)",
+    }}>
+      <div className="f-display" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+          <rect x="8.5" y="0.707" width="11.5" height="11.5" transform="rotate(45 8.5 0.707)" fill="none" stroke="var(--gold)" strokeWidth="1"/>
+          <rect x="8.5" y="3.536" width="7" height="7" transform="rotate(45 8.5 3.536)" fill="var(--gold)" opacity="0.35"/>
+        </svg>
+        <span style={{ color: "var(--parchment-3)", fontWeight: 600, fontSize: "0.95rem" }}>Blinded Muslim Course</span>
+      </div>
+      <p style={{ color: "var(--text-faint)", fontSize: "0.78rem", letterSpacing: "0.06em" }}>Batch 3 · For University Students · Structured Islamic Clarity</p>
+    </footer>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   ROOT
+───────────────────────────────────────────── */
+export default function BlindedMuslimV2() {
+  useReveal();
+  return (
+    <>
+      <GlobalStyles />
+      <Navbar />
+      <main>
+        <Hero />
+        <ProblemSection />
+        <CredibilitySection />
+        <PosterSection />
+        <ModulesSection />
+        <TransformationSection />
+        <WhyDifferentSection />
+        <WhoSection />
+        <EnrollSection />
+        <FinalMessage />
+      </main>
+      <Footer />
+    </>
+  );
+}
