@@ -1,14 +1,14 @@
 export function Footer() {
   return (
     <footer style={{
-      background: "var(--charcoal-3)",
-      padding: "2.5rem 80px",
+      background: "var(--charcoal)",
+      padding: "var(--section-pv) var(--section-ph)",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
       flexWrap: "wrap",
       gap: "1rem",
-      borderTop: "1px solid rgba(184,136,60,0.12)",
+      borderTop: "1px solid var(--border)",
     }}>
       <div className="f-display" style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
@@ -17,7 +17,7 @@ export function Footer() {
         </svg>
         <span style={{ color: "var(--parchment-3)", fontWeight: 600, fontSize: "0.95rem" }}>Blinded Muslim Course</span>
       </div>
-      <p style={{ color: "var(--text-faint)", fontSize: "0.78rem", letterSpacing: "0.06em" }}>Batch 3 · For University Students · Structured Islamic Clarity</p>
+      <p style={{ color: "var(--text-faint)", fontSize: "0.78rem", letterSpacing: "0.06em" }}>Batch 3 · For Students · Structured Islamic Clarity</p>
     </footer>
   );
 }

@@ -51,7 +51,7 @@ export function ModulesSection() {
   ];
 
   return (
-    <section id="course" style={{ background: "var(--parchment)", padding: "100px 80px" }}>
+    <section id="course" style={{ background: "var(--parchment)", padding: "var(--section-pv) var(--section-ph)" }}>
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
         <SectionHeader
           label="Course Structure"
@@ -71,7 +71,7 @@ export function ModulesSection() {
               style={{
                 background: "var(--white)",
                 display: "grid",
-                gridTemplateColumns: "80px 1fr",
+                gridTemplateColumns: "clamp(60px, 10vw, 80px) 1fr",
                 overflow: "hidden",
               }}
             >
@@ -82,26 +82,26 @@ export function ModulesSection() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: "2.5rem 1rem",
+                padding: "2rem 1rem",
               }}>
-                <span className="f-display" style={{ fontSize: "2.2rem", fontWeight: 700, color: mod.color, lineHeight: 1 }}>{mod.n}</span>
+                <span className="f-display" style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 700, color: mod.color, lineHeight: 1 }}>{mod.n}</span>
               </div>
 
               {/* Content column */}
-              <div style={{ padding: "2.5rem 3rem" }}>
-                <p style={{ color: mod.color, fontSize: "0.72rem", letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600, marginBottom: "0.4rem" }}>{mod.label}</p>
-                <h3 className="f-display" style={{ fontSize: "1.6rem", fontWeight: 600, color: "var(--charcoal)", marginBottom: "1.5rem" }}>{mod.title}</h3>
+              <div style={{ padding: "clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 5vw, 3rem)" }}>
+                <p style={{ color: mod.color, fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, marginBottom: "0.4rem" }}>{mod.label}</p>
+                <h3 className="f-display" style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 600, color: "var(--charcoal)", marginBottom: "1.5rem" }}>{mod.title}</h3>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }} className="two-col">
                   {mod.points.map((pt) => (
                     <div key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <span style={{ color: mod.color, fontSize: "0.55rem", flexShrink: 0, marginTop: 7 }}>◆</span>
-                      <span style={{ color: "var(--text-muted)", fontSize: "0.88rem", lineHeight: 1.6 }}>{pt}</span>
+                      <span style={{ color: mod.color, fontSize: "0.5rem", flexShrink: 0, marginTop: 7 }}>◆</span>
+                      <span style={{ color: "var(--text-muted)", fontSize: "0.85rem", lineHeight: 1.6 }}>{pt}</span>
                     </div>
                   ))}
                 </div>
 
-                <p className="f-display" style={{ color: "var(--gold)", fontStyle: "italic", fontSize: "1rem", borderTop: "1px solid var(--border)", paddingTop: "1.2rem" }}>
+                <p className="f-display" style={{ color: "var(--gold)", fontStyle: "italic", fontSize: "0.95rem", borderTop: "1px solid var(--border)", paddingTop: "1.2rem" }}>
                   → {mod.close}
                 </p>
               </div>

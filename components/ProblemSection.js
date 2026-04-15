@@ -9,7 +9,7 @@ export function ProblemSection() {
     { icon: "◈", text: "Feeling 'educated' but not truly grounded" },
   ];
   return (
-    <section style={{ background: "var(--charcoal)", padding: "100px 80px" }}>
+    <section id="problem" style={{ background: "var(--charcoal)", padding: "var(--section-pv) var(--section-ph)" }}>
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <SectionHeader
           label="The Problem"

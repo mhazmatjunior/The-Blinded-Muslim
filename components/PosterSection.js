@@ -3,7 +3,7 @@ import { SectionHeader } from "./Shared";
 
 export function PosterSection() {
   return (
-    <section id="poster" style={{ background: "var(--charcoal-2)", padding: "100px 80px" }}>
+    <section id="poster" style={{ background: "var(--charcoal-2)", padding: "var(--section-pv) var(--section-ph)" }}>
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
         <SectionHeader
           label="Batch 3"
@@ -41,7 +41,7 @@ export function PosterSection() {
           <div>
             <div className="reveal" style={{ marginBottom: "2.5rem" }}>
               <p className="f-display" style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.2rem)", color: "var(--parchment)", lineHeight: 1.3, marginBottom: "1rem", fontStyle: "italic" }}>
-                "Batch 3 marks a new chapter in structured Islamic clarity for university students."
+                "Batch 3 marks a new chapter in structured Islamic clarity for students."
               </p>
               <p style={{ color: "var(--text-faint)", fontSize: "0.9rem", lineHeight: 1.8 }}>
                 After two successful batches across UET Taxila, HITEC University.<br />Batch 3 opens with expanded reach, deeper content, and a refined approach.
@@ -51,7 +51,7 @@ export function PosterSection() {
             {[
               { label: "Format", value: "4 sessions per month · 3 months" },
               { label: "Mode", value: "Structured discussion-based learning" },
-              { label: "Audience", value: "University students only" },
+              { label: "Audience", value: "Students only" },
               { label: "Language", value: "Urdu / English" },
               { label: "Batch Size", value: "Limited spots available" },
             ].map((item) => (
@@ -72,7 +72,7 @@ export function PosterSection() {
               </div>
             ))}
 
-            <div className="reveal" style={{ marginTop: "2.5rem" }}>
+            <div className="reveal flex-center-mobile" style={{ marginTop: "2.5rem" }}>
               <a href="#enroll" className="btn-primary">
                 Reserve Your Spot →
               </a>

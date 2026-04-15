@@ -2,7 +2,7 @@ import { SectionHeader } from "./Shared";
 
 export function WhoSection() {
   return (
-    <section style={{ background: "var(--parchment)", padding: "80px 80px" }}>
+    <section style={{ background: "var(--parchment)", padding: "var(--section-pv) var(--section-ph)" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <SectionHeader label="Eligibility" heading="Is This Course For You?" />
 

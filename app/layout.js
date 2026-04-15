@@ -22,7 +22,7 @@ const notoArabic = Noto_Naskh_Arabic({
 
 export const metadata = {
   title: "Blinded Muslim | Reconnecting Students with Islam",
-  description: "A structured 3-month journey designed to help university students rediscover clarity, purpose, and the true understanding of Islam in today's intellectual and ideological chaos.",
+  description: "A structured 3-month journey designed to help students rediscover clarity, purpose, and the true understanding of Islam in today's intellectual and ideological chaos.",
 };
 
 export default function RootLayout({ children }) {

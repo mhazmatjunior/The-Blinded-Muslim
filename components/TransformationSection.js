@@ -9,8 +9,8 @@ export function TransformationSection() {
     ["Searching", "Purpose-Driven Living"],
   ];
   return (
-    <section style={{ background: "var(--charcoal)", padding: "100px 80px" }}>
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+    <section style={{ background: "var(--charcoal)", padding: "var(--section-pv) var(--section-ph)" }}>
+      <div style={{ maxWidth: 800, margin: "0 auto" }}>
         <SectionHeader
           label="Transformation"
           heading="Who You Become After This Course"
@@ -18,36 +18,34 @@ export function TransformationSection() {
           light
         />
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "0", alignItems: "stretch" }}>
-          {/* From column */}
-          <div>
-            <p style={{ color: "var(--text-faint)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", textAlign: "center", padding: "0 0 1rem", borderBottom: "1px solid rgba(184,136,60,0.15)" }}>Before</p>
-            {shifts.map(([from]) => (
-              <div key={from} style={{ padding: "1.25rem 2rem 1.25rem 0", borderBottom: "1px solid rgba(184,136,60,0.08)", textAlign: "right" }}>
-                <span style={{ color: "var(--text-faint)", fontSize: "0.97rem", textDecoration: "line-through" }}>{from}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Arrow column */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ height: "3rem" }} />
-            {shifts.map((_, i) => (
-              <div key={i} style={{ height: "3.5rem", display: "flex", alignItems: "center" }}>
-                <span style={{ color: "var(--gold)", fontSize: "1.1rem", padding: "0 1.5rem" }}>→</span>
-              </div>
-            ))}
-          </div>
-
-          {/* To column */}
-          <div>
-            <p style={{ color: "var(--text-faint)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", textAlign: "center", padding: "0 0 1rem", borderBottom: "1px solid rgba(184,136,60,0.15)" }}>After</p>
-            {shifts.map(([_, to]) => (
-              <div key={to} style={{ padding: "1.25rem 0 1.25rem 2rem", borderBottom: "1px solid rgba(184,136,60,0.08)" }}>
-                <span style={{ color: "var(--parchment)", fontSize: "0.97rem", fontWeight: 500 }}>{to}</span>
-              </div>
-            ))}
-          </div>
+        <div 
+          className="two-col"
+          style={{ 
+            display: "grid", 
+            gridTemplateColumns: "1fr 1fr", 
+            gap: "2rem",
+            alignItems: "stretch" 
+          }}
+        >
+          {shifts.map(([from, to], i) => (
+            <div 
+              key={i} 
+              className="reveal"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(184,136,60,0.15)",
+                padding: "1.25rem 1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.4rem",
+                position: "relative"
+              }}
+            >
+              <div style={{ position: "absolute", top: "50%", right: "-1rem", transform: "translateY(-50%) translateX(-50%) rotate(-45deg)", width: "8px", height: "8px", borderRight: "1px solid var(--gold)", borderBottom: "1px solid var(--gold)", opacity: 0.5 }} className="nav-desktop" />
+              <p style={{ color: "var(--text-faint)", fontSize: "0.75rem", textDecoration: "line-through", opacity: 0.6 }}>{from}</p>
+              <p style={{ color: "var(--parchment)", fontSize: "1.05rem", fontWeight: 500 }}>{to}</p>
+            </div>
+          ))}
         </div>
 
         <p className="f-display reveal" style={{ textAlign: "center", color: "var(--gold-light)", fontStyle: "italic", fontSize: "1.1rem", marginTop: "3rem" }}>

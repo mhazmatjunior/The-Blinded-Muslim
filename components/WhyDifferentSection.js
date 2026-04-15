@@ -2,7 +2,7 @@ import { SectionHeader } from "./Shared";
 
 export function WhyDifferentSection() {
   return (
-    <section style={{ background: "var(--parchment-2)", padding: "100px 80px" }}>
+    <section style={{ background: "var(--white)", padding: "var(--section-pv) var(--section-ph)" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <SectionHeader
           label="Distinction"

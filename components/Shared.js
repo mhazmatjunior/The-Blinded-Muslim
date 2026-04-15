@@ -9,7 +9,7 @@ export const Ornament = () => (
 );
 
 export const SectionHeader = ({ label, heading, sub, light = false }) => (
-  <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+  <div className="section-header" style={{ textAlign: "center" }}>
     <div className="reveal" style={{ marginBottom: "1rem" }}>
       <Ornament />
       <span className="label-tag" style={light ? { color: "var(--gold-pale)", borderColor: "var(--gold-pale)" } : {}}>

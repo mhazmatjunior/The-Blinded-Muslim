@@ -7,7 +7,7 @@ export function CredibilitySection() {
     { name: "University of Chenab", sub: "Launching" },
   ];
   return (
-    <section style={{ background: "var(--parchment-2)", padding: "100px 80px" }}>
+    <section style={{ background: "var(--parchment-2)", padding: "var(--section-pv) var(--section-ph)" }}>
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
         <SectionHeader
           label="Credibility"
@@ -68,7 +68,7 @@ export function CredibilitySection() {
 
         {/* Quote from CBS President */}
         <div className="reveal" style={{
-          padding: "2.5rem 3rem",
+          padding: "2.5rem var(--section-ph)",
           background: "var(--charcoal)",
           border: "1px solid var(--border)",
           position: "relative",
@@ -76,12 +76,12 @@ export function CredibilitySection() {
           margin: "0 auto",
         }}>
           <span className="f-display" style={{ position: "absolute", top: -20, left: 32, fontSize: "5rem", color: "var(--gold)", lineHeight: 1, opacity: 0.4 }}>"</span>
-          <p className="f-display" style={{ color: "var(--parchment)", fontSize: "1.2rem", fontStyle: "italic", lineHeight: 1.65, position: "relative", zIndex: 1 }}>
-            The President of CBS personally participated in Batch 02 and strongly advocated bringing this course to the University of Chenab, considering it essential for university students.
+          <p className="f-display" style={{ color: "var(--parchment)", fontSize: "1.1rem", fontStyle: "italic", lineHeight: 1.6, position: "relative", zIndex: 1 }}>
+            The President of CBS personally participated in Batch 02 and strongly advocated bringing this course to the University of Chenab, considering it essential for students.
           </p>
           <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "12px" }}>
             <div style={{ width: 32, height: 1, background: "var(--gold)" }} />
-            <p style={{ color: "var(--text-faint)", fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>President, CBS</p>
+            <p style={{ color: "var(--text-faint)", fontSize: "0.7rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>President, CBS</p>
           </div>
         </div>
       </div>
