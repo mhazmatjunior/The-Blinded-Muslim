@@ -4,47 +4,41 @@ export function ModulesSection() {
   const modules = [
     {
       n: "I",
-      color: "var(--accent-red)",
-      colorBg: "rgba(139,46,46,0.07)",
-      label: "Module One · The Problem",
+      label: "Phase One · Foundations",
       title: "Understanding Why Confusion Exists",
       points: [
         "Meaning and importance of true knowledge",
         "Difference between information and understanding",
-        "Psychological and intellectual distortion in modern life",
-        "Misalignment in core beliefs — Tauheed, fear, fascination",
+        "Psychological distortion in modern life",
+        "Misalignment in core beliefs — Tauheed & fear",
         "Influence of environment on thinking patterns",
         "Introduction to the true concept of Ibadah",
       ],
-      close: "\"You don't just learn the problem, you learn how it formed.\"",
+      close: "You don't just learn the problem, you learn how it formed.",
     },
     {
       n: "II",
-      color: "var(--accent-teal)",
-      colorBg: "rgba(31,92,82,0.07)",
-      label: "Module Two · The Solution",
+      label: "Phase Two · Reconstruction",
       title: "Rebuilding Clarity From the Foundation",
       points: [
         "Deep understanding of Iman and its components",
         "Clearing misconceptions about core beliefs",
         "Detailed discussion on Akhirah and Al-Qadr",
         "Answering doubts commonly faced by students",
-        "Establishing Islam as a complete and authoritative system of life",
+        "Establishing Islam as a complete system of life",
       ],
       close: "This module reconstructs clarity from the ground up.",
     },
     {
       n: "III",
-      color: "var(--accent-blue)",
-      colorBg: "rgba(30,61,107,0.07)",
-      label: "Module Three · The Way Forward",
+      label: "Phase Three · Awareness",
       title: "Living With Awareness and Direction",
       points: [
         "Understanding ideological and cultural influences",
         "How narratives are shaped in modern society",
         "Intellectual and spiritual awareness in daily life",
         "Practical roadmap after gaining clarity",
-        "Implementation of understanding into real-world behavior",
+        "Implementation into real-world behavior",
       ],
       close: "This is where clarity turns into action.",
     },
@@ -52,57 +46,89 @@ export function ModulesSection() {
 
   return (
     <section id="course" style={{ background: "var(--parchment)", padding: "var(--section-pv) var(--section-ph)" }}>
-      <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1120, margin: "0 auto" }}>
         <SectionHeader
           label="Course Structure"
           heading={
             <>
-              A Complete <span style={{ color: "var(--gold)" }}><em style={{ fontStyle: "italic" }}>3</em>-<em style={{ fontStyle: "italic" }}>Month</em></span> Intellectual & Spiritual Framework
+              A Complete <span style={{ color: "var(--gold)" }}><em style={{ fontStyle: "italic" }}>3</em>-<em style={{ fontStyle: "italic" }}>Month</em></span> Framework
             </>
           }
           sub="Three structured modules · One month each · Four guided sessions per module"
         />
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "2px", background: "var(--border)" }}>
+        <div style={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(3, 1fr)", 
+          gap: "1.5rem",
+          alignItems: "stretch"
+        }} className="three-col">
           {modules.map((mod, i) => (
             <div
               key={mod.n}
               className={`reveal d${i + 1}`}
               style={{
                 background: "var(--white)",
-                display: "grid",
-                gridTemplateColumns: "clamp(60px, 10vw, 80px) 1fr",
-                overflow: "hidden",
+                border: "1px solid var(--border)",
+                padding: "2.5rem 2rem",
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
               }}
             >
-              {/* Number column */}
-              <div style={{
-                background: mod.colorBg,
-                borderRight: `2px solid ${mod.color}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "2rem 1rem",
-              }}>
-                <span className="f-display" style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 700, color: mod.color, lineHeight: 1 }}>{mod.n}</span>
+              {/* Premium Gold Top Bar */}
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "var(--gold)" }} />
+
+              {/* Module Metadata */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <span className="f-display" style={{ 
+                  fontSize: "3rem", 
+                  fontWeight: 700, 
+                  color: "var(--gold)", 
+                  opacity: 0.15,
+                  position: "absolute",
+                  top: "1.5rem",
+                  right: "2rem",
+                  lineHeight: 1
+                }}>
+                  {mod.n}
+                </span>
+                <p style={{ color: "var(--gold)", fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, marginBottom: "0.5rem" }}>
+                  {mod.label}
+                </p>
+                <h3 className="f-display" style={{ 
+                  fontSize: "1.4rem", 
+                  fontWeight: 700, 
+                  color: "var(--charcoal)", 
+                  lineHeight: 1.25,
+                  maxWidth: "90%"
+                }}>
+                  {mod.title}
+                </h3>
               </div>
 
-              {/* Content column */}
-              <div style={{ padding: "clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 5vw, 3rem)" }}>
-                <p style={{ color: mod.color, fontSize: "0.7rem", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, marginBottom: "0.4rem" }}>{mod.label}</p>
-                <h3 className="f-display" style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 600, color: "var(--charcoal)", marginBottom: "1.5rem" }}>{mod.title}</h3>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }} className="two-col">
+              {/* Points */}
+              <div style={{ flex: 1, marginBottom: "2rem" }}>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                   {mod.points.map((pt) => (
-                    <div key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-                      <span style={{ color: mod.color, fontSize: "0.5rem", flexShrink: 0, marginTop: 7 }}>◆</span>
-                      <span style={{ color: "var(--text-muted)", fontSize: "0.85rem", lineHeight: 1.6 }}>{pt}</span>
-                    </div>
+                    <li key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                      <span style={{ color: "var(--gold)", fontSize: "0.5rem", flexShrink: 0, marginTop: 7 }}>◆</span>
+                      <span style={{ color: "var(--text-muted)", fontSize: "0.85rem", lineHeight: 1.5 }}>{pt}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
+              </div>
 
-                <p className="f-display" style={{ color: "var(--gold)", fontStyle: "italic", fontSize: "0.95rem", borderTop: "1px solid var(--border)", paddingTop: "1.2rem" }}>
-                  → {mod.close}
+              {/* Footer Quote */}
+              <div style={{ borderTop: "1px solid var(--border)", paddingTop: "1.25rem" }}>
+                <p className="f-display" style={{ 
+                  color: "var(--gold)", 
+                  fontStyle: "italic", 
+                  fontSize: "0.92rem", 
+                  lineHeight: 1.4 
+                }}>
+                  "{mod.close}"
                 </p>
               </div>
             </div>
