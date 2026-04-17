@@ -4,6 +4,7 @@ import { useReveal } from "../hooks/useReveal";
 import { Navbar } from "../components/Navbar";
 import { Hero } from "../components/Hero";
 import { ProblemSection } from "../components/ProblemSection";
+import { SolutionSection } from "../components/SolutionSection";
 import { CredibilitySection } from "../components/CredibilitySection";
 import { PosterSection } from "../components/PosterSection";
 import { ModulesSection } from "../components/ModulesSection";
@@ -23,6 +24,7 @@ export default function Home() {
       <main>
         <Hero />
         <ProblemSection />
+        <SolutionSection />
         <ModulesSection />
         <TransformationSection />
         <WhyDifferentSection />
