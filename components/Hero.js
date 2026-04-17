@@ -94,7 +94,14 @@ export function Hero() {
             </div>
 
             <div className="reveal d5" style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center" }}>
-              <a href="#enroll" className="btn-primary">Join Batch 3 Now →</a>
+              <a 
+                href="https://forms.gle/Uf6RYBn5E93RASXx9" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn-primary"
+              >
+                Join Batch 3 Now →
+              </a>
               <a href="#course" className="btn-ghost">View Course</a>
             </div>
           </div>

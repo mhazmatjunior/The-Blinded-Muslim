@@ -72,9 +72,14 @@ export function PosterSection() {
               </div>
             ))}
 
-            <div className="reveal flex-center-mobile" style={{ marginTop: "2.5rem" }}>
-              <a href="#enroll" className="btn-primary">
-                Reserve Your Spot →
+            <div className="reveal d4" style={{ marginTop: "3rem", display: "flex", justifyContent: "center" }}>
+              <a 
+                href="https://forms.gle/Uf6RYBn5E93RASXx9" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn-primary"
+              >
+                Reserve Your Spot
               </a>
             </div>
           </div>

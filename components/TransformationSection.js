@@ -13,7 +13,7 @@ export function TransformationSection() {
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         <SectionHeader
           label="Transformation"
-          heading="Who You Become After This Course"
+          heading="What Changes After This Course"
           sub="By the end of this journey, you are not the same person."
           light
         />

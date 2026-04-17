@@ -50,15 +50,21 @@ export function EnrollSection() {
         </p>
 
         <div className="reveal d4" style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="#" className="btn-primary" style={{ 
-            background: "var(--gold)", 
-            borderColor: "var(--gold)", 
-            color: "var(--charcoal)", 
-            padding: "clamp(14px, 3vw, 18px) clamp(24px, 6vw, 52px)", 
-            fontSize: "clamp(0.75rem, 2.5vw, 0.92rem)",
-            letterSpacing: "0.06em"
-          }}>
-            Join Blinded Muslim Course →
+          <a 
+            href="https://forms.gle/Uf6RYBn5E93RASXx9" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="btn-primary" 
+            style={{ 
+              background: "var(--gold)", 
+              borderColor: "var(--gold)", 
+              color: "var(--charcoal)", 
+              padding: "clamp(14px, 3vw, 18px) clamp(24px, 6vw, 52px)", 
+              fontSize: "clamp(0.75rem, 2.5vw, 0.92rem)",
+              letterSpacing: "0.06em"
+            }}
+          >
+            Secure Your Spot
           </a>
         </div>
       </div>
