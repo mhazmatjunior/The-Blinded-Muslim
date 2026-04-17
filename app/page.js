@@ -23,12 +23,12 @@ export default function Home() {
       <main>
         <Hero />
         <ProblemSection />
-        <CredibilitySection />
-        <PosterSection />
         <ModulesSection />
         <TransformationSection />
         <WhyDifferentSection />
         <WhoSection />
+        <PosterSection />
+        <CredibilitySection />
         <EnrollSection />
         <FinalMessage />
       </main>
