@@ -126,7 +126,8 @@ export function ModulesSection() {
                   color: "var(--gold)", 
                   fontStyle: "italic", 
                   fontSize: "0.92rem", 
-                  lineHeight: 1.4 
+                  lineHeight: 1.4,
+                  fontWeight: 600
                 }}>
                   "{mod.close}"
                 </p>
