@@ -4,7 +4,7 @@ export function ModulesSection() {
   const modules = [
     {
       n: "I",
-      label: "Phase One · Foundations",
+      label: "Phase One · The Problem",
       title: "Understanding Why Confusion Exists",
       points: [
         "Meaning and importance of true knowledge",
@@ -18,7 +18,7 @@ export function ModulesSection() {
     },
     {
       n: "II",
-      label: "Phase Two · Reconstruction",
+      label: "Phase Two · The Solution",
       title: "Rebuilding Clarity From the Foundation",
       points: [
         "Deep understanding of Iman and its components",
@@ -31,7 +31,7 @@ export function ModulesSection() {
     },
     {
       n: "III",
-      label: "Phase Three · Awareness",
+      label: "Phase Three · Way Forward",
       title: "Living With Awareness and Direction",
       points: [
         "Understanding ideological and cultural influences",
