@@ -31,7 +31,7 @@ export function ProblemSection() {
               <p style={{ color: "var(--gold-pale)", fontSize: "0.9rem", lineHeight: 1.8 }}>
                 The real issue is not ignorance.<br />
                 <strong style={{ color: "var(--parchment)", fontWeight: 500 }}>
-                "It is misunderstanding ... shaped by environment, narratives, and incomplete knowledge."
+                "It is misunderstanding of Islam ... shaped by environment, narratives, and incomplete knowledge."
                 </strong>
               </p>
             </div>

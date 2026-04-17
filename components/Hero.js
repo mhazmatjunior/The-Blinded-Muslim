@@ -88,7 +88,7 @@ export function Hero() {
               ].map((s) => (
                 <div key={s.label}>
                   <p className="f-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--charcoal)", lineHeight: 1 }}>{s.num}</p>
-                  <p style={{ fontSize: "0.75rem", color: "var(--text-faint)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 4 }}>{s.label}</p>
+                  <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 4 }}>{s.label}</p>
                 </div>
               ))}
             </div>

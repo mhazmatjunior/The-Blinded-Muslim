@@ -14,8 +14,6 @@ export function Navbar() {
 
   const navLinks = [
     ["#course", "Course"],
-    ["#poster", "Batch 3"],
-    ["#enroll", "Enroll"],
   ];
 
   return (
@@ -26,9 +24,9 @@ export function Navbar() {
           padding: "0 var(--section-ph)",
           height: 72,
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: scrolled || isOpen ? "rgba(247,242,232,0.98)" : "transparent",
-          borderBottom: scrolled || isOpen ? "1px solid var(--border)" : "none",
-          backdropFilter: scrolled || isOpen ? "blur(16px)" : "none",
+          background: scrolled || isOpen ? "rgba(247,242,232,0.98)" : "rgba(247,242,232,0.85)",
+          borderBottom: "1px solid var(--gold)",
+          backdropFilter: "blur(16px)",
           transition: "all 0.4s cubic-bezier(.22,1,.36,1)",
         }}
       >
